@@ -55,11 +55,7 @@ router.get('/', (req, res) =>{
         }
     }
     else {
-        if (data.length > messagesCount) {
-            for (let i = data.length - messagesCount; i < data.length; i++) {
-                tmpData.push(data[i]);
-            }
-        } else tmpData = data.slice();
+        tmpData = data.slice();
     }
     res.send(tmpData);
 });

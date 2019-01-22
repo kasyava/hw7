@@ -22,7 +22,11 @@ $(function(){
         squarespaceModal.modal('show');
     });
 
-    //при нажатии на кнопку отправляем постом данные на сервер
+    squarespaceModal.on('hidden.bs.modal', function() {
+        $(this).find("input,textarea,select").val('').end();
+
+    });
+
     $('#btnSendMessage').click((e) => {
         e.preventDefault();
         squarespaceModal.modal('hide');
@@ -31,40 +35,30 @@ $(function(){
         console.log(data);
         sendAjax("POST", data)
             .then((responce) =>{
-                errorMsg.empty(); //очищаем вывод ошибки у пользователя
-                fillArray([responce]); //закоментировал чтобы показать, что работает setInterval
-                console.log(responce);
-
-                squarespaceModal.on('hidden.bs.modal', function() {
-                    $(this).find("input,textarea,select").val('').end();
-
-                });
+                errorMsg.empty();
             });
-
     });
 
-    //получаем последние 30 сообщений и заполняем массив с сообщениями
     sendAjax().then(responce => fillArray(responce));
 
-    // каждые 2 секунды запрашиваем с сервера сообщения новее нашего последнего
-    // setInterval(()=>{
-    //     sendAjax("GET",'datetime='+lastDate).then(responce => fillArray(responce));
-    // },2000);
+    setInterval(()=>{
+        sendAjax("GET",'datetime='+lastDate).then(responce => fillArray(responce));
+    },2000);
 });
 
-//функция заполнения маасива сообщениями
+
 let fillArray = (data) =>{
     if(data.length) {
         for (let i = 0; i < data.length; i++) {
             if(!data[i].author) data[i].author = 'Anonymous';
             globalArray.push(data[i]);
         }
-        lastDate = globalArray[globalArray.length-1].datetime;                  //тут будет лежать дата последнего сообщения
+        lastDate = globalArray[globalArray.length-1].datetime;
     }
-    printMessage(globalArray);                                                  //выводим наш массив на страницу
+    printMessage(globalArray);
 };
 
-//функция вывода массива на экран пользователю
+
 let printMessage = (data) =>{
 
     let list = "";
@@ -84,8 +78,8 @@ let printMessage = (data) =>{
         list+='</div>';
     });
 
-    msgList.empty();      //очищаем наш div с сообщениями
-    msgList.html(list);   //и выводим новые сообщения
+    msgList.empty();
+    msgList.html(list);
 };
 
 let sendAjax=(type='GET', data='')=> {
