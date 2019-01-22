@@ -1,0 +1,35 @@
+html,body, .wrapper, .col{
+	height:auto;
+}
+.wrapper{
+	overflow: hidden;
+}
+.col{
+	float:left;
+}
+.one{
+	width:70%;
+
+}
+.two{
+	width:30%;
+	background-color: green;
+}
+.header{
+	height: 60px;
+
+	background-color: blue;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+
+
+}
+label {
+	margin-right:0.5em;
+	width:10em;
+	float:left;
+	text-align:left;
+	display:block;
+	color: yellow;
+}
