@@ -1,10 +1,10 @@
-/** Modules **/
+
 import express from "express";
 import multer from "multer";
 import path from "path";
 import nanoid from "nanoid";
 
-/** Import files **/
+
 import config from "../config";
 import db from "../db";
 
@@ -29,7 +29,7 @@ const messagesCount =30;
 
 const data = [];
 
-/** Init DB on startup**/
+
 db.init(data, ()=>{
     console.log("Init db");
     data.sort((a,b) => (a.datetime > b.datetime) ? 1 : ((b.datetime > a.datetime) ? -1 : 0)); //sort our array by date
@@ -64,12 +64,12 @@ router.get('/', (req, res) =>{
     res.send(tmpData);
 });
 
-/** GET request on /messages/all **/
+
 router.get('/all', (req, res) =>{
     res.send(data);
 });
 
-/** POST request on /messages **/
+
 router.post('/', upload.single ("image"), (req, res) =>{
     db.checkMessage(req.body,(answer) =>{
        if (answer.code ===400) {
@@ -78,14 +78,11 @@ router.post('/', upload.single ("image"), (req, res) =>{
 
        }
        else{
-           // req.body.id = nanoid();
-           // req.body.datetime = new Date().toISOString();
 
            const newMessage = req.body;
            if(req.file) newMessage.image = req.file.filename;
            newMessage.id = nanoid();
            newMessage.datetime = new Date().toISOString();
-
 
            db.addItem(data, newMessage);
 
